@@ -14,6 +14,7 @@
   --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
 
   font-family: var(--font-display);
+  line-height: 1.5;
   color: var(--color-ink);
   background: var(--color-paper);
   font-synthesis: none;
@@ -32,6 +33,10 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
+}
+
+section[id] {
+  scroll-margin-top: 90px;
 }
 
 button,

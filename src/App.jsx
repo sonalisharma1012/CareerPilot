@@ -1,3 +1,12 @@
+import { useState } from 'react'
+import Dashboard from './pages/Dashboard'
+import {
+  DsaPage,
+  JobsPage,
+  ProfilePage,
+  ResumePage,
+  SkillsPage,
+} from './pages/WorkspacePages'
 import './App.css'
 
 const features = [
@@ -7,6 +16,7 @@ const features = [
     description:
       'Organize roles, deadlines, and interview stages in one calm, easy-to-scan workspace.',
     label: 'Job tracking',
+    href: '/jobs',
     icon: (
       <>
         <rect x="3" y="5" width="18" height="16" rx="3" />
@@ -20,6 +30,7 @@ const features = [
     description:
       'Build a steady DSA habit, revisit the topics that need work, and see your progress add up.',
     label: 'DSA practice',
+    href: '/dsa',
     icon: (
       <>
         <path d="M8 4H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M8 20H5a2 2 0 0 1-2-2v-3m13 5h3a2 2 0 0 0 2-2v-3" />
@@ -33,6 +44,7 @@ const features = [
     description:
       'Shape your experience into a clear story, then tailor it to the roles you want.',
     label: 'Resume builder',
+    href: '/resume',
     icon: (
       <>
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -46,6 +58,7 @@ const features = [
     description:
       'Compare your strengths with role requirements and find a useful next step to work on.',
     label: 'Skill matching',
+    href: '/skills',
     icon: (
       <>
         <circle cx="11" cy="11" r="7" />
@@ -87,18 +100,35 @@ function BrandMark() {
 }
 
 function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   return (
     <header className="site-header">
       <nav className="navbar page-container" aria-label="Main navigation">
         <BrandMark />
-        <div className="nav-links">
-          <a href="#features">Features</a>
-          <a href="#how-it-works">How it works</a>
-          <a href="#student-preview">For students</a>
+        <div
+          className={`nav-links${isMenuOpen ? ' is-open' : ''}`}
+          id="primary-navigation"
+        >
+          <a href="#features" onClick={() => setIsMenuOpen(false)}>Features</a>
+          <a href="#how-it-works" onClick={() => setIsMenuOpen(false)}>How it works</a>
+          <a href="#student-preview" onClick={() => setIsMenuOpen(false)}>For students</a>
         </div>
-        <a className="button button-nav" href="#features">
-          Explore CareerPilot <ArrowIcon diagonal />
+        <a className="button button-nav" href="/dashboard">
+          Dashboard <ArrowIcon diagonal />
         </a>
+        <button
+          className={`nav-menu-toggle${isMenuOpen ? ' is-open' : ''}`}
+          type="button"
+          aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={isMenuOpen}
+          aria-controls="primary-navigation"
+          onClick={() => setIsMenuOpen((open) => !open)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </nav>
     </header>
   )
@@ -209,7 +239,7 @@ function FeatureCard({ feature }) {
       </div>
       <h3>{feature.title}</h3>
       <p>{feature.description}</p>
-      <a className="feature-link" href="#how-it-works">
+      <a className="feature-link" href={feature.href}>
         {feature.label} <ArrowIcon diagonal />
       </a>
     </article>
@@ -310,4 +340,18 @@ function Landingpage() {
   )
 }
 
-export default Landingpage
+function App() {
+  const path = window.location.pathname.replace(/\/+$/, '') || '/'
+  const routes = {
+    '/dashboard': <Dashboard />,
+    '/jobs': <JobsPage />,
+    '/dsa': <DsaPage />,
+    '/resume': <ResumePage />,
+    '/skills': <SkillsPage />,
+    '/profile': <ProfilePage />,
+  }
+
+  return routes[path] || <Landingpage />
+}
+
+export default App
